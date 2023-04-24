@@ -4,8 +4,21 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from caffe.models import Seller, Product
 from caffe.serializers import SellerSerializer, ProductSerializer
+from django.contrib.auth.models import User
 
 # Create your views here.
+
+@csrf_exempt
+def seller_signup(request):
+
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = SellerSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            user = User.objects.create_user(data["username"], data["username"] + "@payhere.com", data["password"])
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
 
 @csrf_exempt
 def product_list(request):
