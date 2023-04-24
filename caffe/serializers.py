@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from caffe.models import AdminUser, Product
+from caffe.models import Seller, Product
 
-class AdminUserSerializer(serializers.ModelSerializer):
+class SellerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = AdminUser 
+        model = Seller 
         fields = ['id', 'username', 'password']
 
 class ProductSerializer(serializers.ModelSerializer):
