@@ -5,6 +5,7 @@ from rest_framework.parsers import JSONParser
 from caffe.models import Seller, Product
 from caffe.serializers import SellerSerializer, ProductSerializer
 from django.contrib.auth.models import User
+from jamo import h2j, j2hcj
 
 # Create your views here.
 
@@ -59,3 +60,21 @@ def product_detail(request, pk):
     elif request.method == 'DELETE':
         product.delete()
         return HttpResponse(status=204)
+
+def search_engine(productName, keyword):
+    words = list(productName.split())
+    chosungs = []
+    for word in words:
+        temp = []
+        for i in word:
+            h = h2j(i)
+            imf = j2hcj(h)
+            temp.append(imf[0])
+        chosungs.append("".join(temp))
+    for word in words:
+        if keyword in word:
+            return True
+    for chosung in chosungs:
+        if keyword in chosung:
+            return True
+    return False
