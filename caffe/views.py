@@ -20,8 +20,8 @@ class SellerSignup(APIView):
         if serializer.is_valid():
             serializer.save()
             user = User.objects.create_user(data["username"], data["username"] + "@payhere.com", data["password"])
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+            return JsonResponse({"meta":{"code":201, "message":"ok"}, "data":serializer.data}, status=201)
+        return JsonResponse({"meta":{"code":400, "message":serializer.errors}, "data":None}, status=400)
 
 class ProductList(APIView):
 
@@ -36,7 +36,7 @@ class ProductList(APIView):
         products = Product.objects.all().filter(seller_id=seller_id)
         serializer = ProductSerializer(products, many=True)
         data_list = list(serializer.data)[page*10:(page+1)*10]
-        return JsonResponse(data_list, safe=False)
+        return JsonResponse({"meta":{"code":200, "message":"ok"}, "data":{"products":data_list}}, safe=False)
 
 class ProductPost(APIView):
 
@@ -53,8 +53,8 @@ class ProductPost(APIView):
         serializer = ProductSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+            return JsonResponse({"meta":{"code":201, "message":"ok"}, "data":serializer.data}, status=201)
+        return JsonResponse({"meta":{"code":400, "message":serializer.errors}, "data":None}, status=400)
 
 class ProductDetail(APIView):
 
@@ -69,20 +69,20 @@ class ProductDetail(APIView):
     def get(self, request, pk, format=None):
         product = self.get_object(pk)
         serializer = ProductSerializer(product)
-        return Response(serializer.data)
+        return Response({"meta":{"code":200, "message":"ok"}, "data":{"product":serializer.data}}, status=200)
 
     def put(self, request, pk, format=None):
         product = self.get_object(pk)
         serializer = ProductSerializer(product, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"meta":{"code":201, "message":"ok"}, "data":{"product":serializer.data}}, status=201)
+        return Response({"meta":{"code":201, "message":serializer.errors}, "data":None}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
         product = self.get_object(pk)
         product.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({"meta":{"code":204, "message":"ok"}, "data":None}, status=status.HTTP_204_NO_CONTENT)
 
 class ProductSearch(APIView):
 
@@ -102,7 +102,7 @@ class ProductSearch(APIView):
             if search_engine(i["name"], search):
                 result.append(i)
 
-        return JsonResponse(result, safe=False)
+        return JsonResponse({"meta":{"code":200, "message":"ok"}, "data":{"products":result}}, safe=False)
 
 
 def search_engine(productName, keyword):
