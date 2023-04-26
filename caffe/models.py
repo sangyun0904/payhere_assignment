@@ -7,6 +7,7 @@ class Seller(models.Model):
 
 class Product(models.Model):
     category = models.CharField(max_length=100)
+    seller_id = models.ForeignKey("Seller", on_delete=models.CASCADE)
     price = models.IntegerField()
     origin_price = models.IntegerField()
     name = models.CharField(max_length=100)

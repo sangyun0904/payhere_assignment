@@ -78,25 +78,25 @@ WSGI_APPLICATION = "payhere_assignment.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.mysql",
-#         "OPTIONS": {
-#             "read_default_file": "./my.cnf",
-#         },
-#     }
-# }
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('MYSQL_DATABASE'),
-        'USER': os.environ.get('MYSQL_USER'),
-        'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
-        'HOST': 'db',
-        'PORT': '3306',
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "OPTIONS": {
+            "read_default_file": "./my.cnf",
+        },
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': os.environ.get('MYSQL_DATABASE'),
+#         'USER': os.environ.get('MYSQL_USER'),
+#         'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
+#         'HOST': 'db',
+#         'PORT': '3306',
+#     }
+# }
 
 
 # Password validation
