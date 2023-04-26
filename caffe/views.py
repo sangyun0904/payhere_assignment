@@ -61,7 +61,25 @@ def product_detail(request, pk):
         product.delete()
         return HttpResponse(status=204)
 
+@csrf_exempt
+def product_search(request, page, search):
+
+    if request.method == 'GET':
+        products = Product.objects.all()
+        serializer = ProductSerializer(products, many=True)
+        data = list(serializer.data)
+        result = []
+        for i in data:
+            if search_engine(i["name"], search):
+                result.append(i)
+
+        return JsonResponse(result, safe=False)
+
+
 def search_engine(productName, keyword):
+    if keyword == "":
+        return True
+
     words = list(productName.split())
     chosungs = []
     for word in words:

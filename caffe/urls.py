@@ -4,5 +4,6 @@ from caffe import views
 urlpatterns = [
     path('caffe/', views.product_list),
     path('caffe/<int:pk>/', views.product_detail),
-    path('caffe/signup/', views.seller_signup)
+    path('caffe/signup/', views.seller_signup),
+    path('caffe/<int:page>/<str:search>/', views.product_search)
 ]
