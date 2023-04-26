@@ -6,13 +6,15 @@ from caffe.models import Seller, Product
 from caffe.serializers import SellerSerializer, ProductSerializer
 from django.contrib.auth.models import User
 from jamo import h2j, j2hcj
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 # Create your views here.
 
-@csrf_exempt
-def seller_signup(request):
+class SellerSignup(APIView):
 
-    if request.method == 'POST':
+    def post(self, request):
         data = JSONParser().parse(request)
         serializer = SellerSerializer(data=data)
         if serializer.is_valid():
@@ -21,15 +23,16 @@ def seller_signup(request):
             return JsonResponse(serializer.data, status=201)
         return JsonResponse(serializer.errors, status=400)
 
-@csrf_exempt
-def product_list(request):
+class ProductList(APIView):
 
-    if request.method == 'GET':
+    permission_classes=[IsAuthenticated]
+
+    def get(self, request):
         products = Product.objects.all()
         serializer = ProductSerializer(products, many=True)
         return JsonResponse(serializer.data, safe=False)
 
-    elif request.method == 'POST':
+    def post(self, request):
         data = JSONParser().parse(request)
         serializer = ProductSerializer(data=data)
         if serializer.is_valid():
@@ -37,34 +40,39 @@ def product_list(request):
             return JsonResponse(serializer.data, status=201)
         return JsonResponse(serializer.errors, status=400)
 
-@csrf_exempt
-def product_detail(request, pk):
+class ProductDetail(APIView):
 
-    try:
-        product = Product.objects.get(pk=pk)
-    except Product.DoesNotExist:
-        return HttpResponse(status=404)
+    permission_classes=[IsAuthenticated]
 
-    if request.method == 'GET':
+    def get_object(self, pk):
+        try:
+            return Product.objects.get(pk=pk)
+        except Product.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        product = self.get_object(pk)
         serializer = ProductSerializer(product)
-        return JsonResponse(serializer.data)
+        return Response(serializer.data)
 
-    elif request.method == 'PUT':
-        data = JSONParser().parse(request)
-        serializer = ProductSerializer(product, data=data)
+    def put(self, request, pk, format=None):
+        product = self.get_object(pk)
+        serializer = ProductSerializer(product, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(serializer.data)
-        return JsonResponse(serializer.errors, status=400)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == 'DELETE':
+    def delete(self, request, pk, format=None):
+        product = self.get_object(pk)
         product.delete()
-        return HttpResponse(status=204)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
-@csrf_exempt
-def product_search(request, page, search):
+class ProductSearch(APIView):
 
-    if request.method == 'GET':
+    permission_classes=[IsAuthenticated]
+
+    def get(self, request, page, search):
         products = Product.objects.all()
         serializer = ProductSerializer(products, many=True)
         data = list(serializer.data)
