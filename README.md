@@ -25,20 +25,36 @@ access 토큰 리프레시
 ### 회원가입 
 
 POST /caffe/signup 
+
 body { "username": phone, "password": password } 
 
-### 상품 리스트 access token 필요
+### 상품 리스트 
 
-GET /caffe/
+GET /caffe/ access token 필요
 
-### 상품 검색 access token 필요
+### 상품 검색 
 
-GET /caffe/<int:page>/<string:keyword>/
+GET /caffe/(int:page)/(string:keyword)/ access token 필요
 
-### 상품 등록 access token 필요
+### 상품 등록 
 
-POST /caffe/ 
+POST /caffe/ access token 필요
+
 body { "category": "coffee", "price":3000, "origin_price":300, "name": "아이스 카페라떼", "info": "ice latte", "barcode":"!!!|||11||", "big_size":false }
+
+### 상품 수정 
+
+PUT /caffe/(int:pk)/ access token 필요
+
+body { "category": "coffee", "price":3000, "origin_price":300, "name": "아이스 카페라떼", "info": "ice latte", "barcode":"!!!|||11||", "big_size":false }
+
+### 상품 상세 정보 
+
+GET /caffe/(int:pk)/ access token 필요
+
+### 상품 삭제 
+
+DELETE /caffe/(int:pk)/ access token 필요
 
 
 ## DB 마이그레이션 후 
