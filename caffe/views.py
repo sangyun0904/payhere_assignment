@@ -27,13 +27,20 @@ class ProductList(APIView):
 
     permission_classes=[IsAuthenticated]
 
+    def get_seller_id(self, user):
+        seller = Seller.objects.get(username=user)
+        return seller.id
+
     def get(self, request):
-        products = Product.objects.all()
+        seller_id = self.get_seller_id(request.user)
+        products = Product.objects.all().filter(seller_id=seller_id)
         serializer = ProductSerializer(products, many=True)
         return JsonResponse(serializer.data, safe=False)
 
     def post(self, request):
         data = JSONParser().parse(request)
+        data["seller"] = self.get_seller_id(request.user)
+        print(type(data), data)
         serializer = ProductSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -72,8 +79,13 @@ class ProductSearch(APIView):
 
     permission_classes=[IsAuthenticated]
 
+    def get_seller_id(self, user):
+        seller = Seller.objects.get(username=user)
+        return seller.id
+
     def get(self, request, page, search):
-        products = Product.objects.all()
+        seller_id = self.get_seller_id(request.user)
+        products = Product.objects.all().filter(seller_id=seller_id)
         serializer = ProductSerializer(products, many=True)
         data = list(serializer.data)
         result = []
