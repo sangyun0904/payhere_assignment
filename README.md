@@ -32,6 +32,9 @@ body { "username": phone, "password": password }
 
 GET /caffe/(int:page)/ access token 필요
 
+<img width="1702" alt="image" src="https://user-images.githubusercontent.com/69445075/234546218-e255d607-d7c2-4fd2-a254-75dd126ec01e.png">
+
+
 ### 상품 검색 
 
 GET /caffe/(int:page)/(string:keyword)/ access token 필요
