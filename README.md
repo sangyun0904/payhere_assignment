@@ -43,7 +43,8 @@ body { "category": "coffee", "price":3000, "origin_price":300, "name": "아이�
 
 ## DB 마이그레이션 후 
 
-<img width="676" alt="(base) • payhere_assignment" src="https://user-images.githubusercontent.com/69445075/233790225-d68d4a89-2f78-45d4-a40c-1a0ee9eb8d91.png">
+<img width="598" alt="image" src="https://user-images.githubusercontent.com/69445075/234509019-1188e145-4b55-4e20-91a0-865b8c28182f.png">
+
 
 ## Serializer 확인 
 
