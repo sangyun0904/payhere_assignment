@@ -30,7 +30,7 @@ body { "username": phone, "password": password }
 
 ### 상품 리스트 
 
-GET /caffe/ access token 필요
+GET /caffe/(int:page)/ access token 필요
 
 ### 상품 검색 
 
