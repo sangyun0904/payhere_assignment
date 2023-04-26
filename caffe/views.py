@@ -31,11 +31,20 @@ class ProductList(APIView):
         seller = Seller.objects.get(username=user)
         return seller.id
 
-    def get(self, request):
+    def get(self, request, page):
         seller_id = self.get_seller_id(request.user)
         products = Product.objects.all().filter(seller_id=seller_id)
         serializer = ProductSerializer(products, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        data_list = list(serializer.data)[page*10:(page+1)*10]
+        return JsonResponse(data_list, safe=False)
+
+class ProductPost(APIView):
+
+    permission_classes=[IsAuthenticated]
+
+    def get_seller_id(self, user):
+        seller = Seller.objects.get(username=user)
+        return seller.id
 
     def post(self, request):
         data = JSONParser().parse(request)
